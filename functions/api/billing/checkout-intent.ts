@@ -53,7 +53,7 @@ interface Body {
 
 const EMAIL_RX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const VAT_RX = /^[A-Z]{2}[A-Z0-9]{8,12}$/;
-const ALLOWED_PLANS = ['monthly', 'halfyear', 'yearly'] as const;
+const ALLOWED_PLANS = ['monthly', 'yearly'] as const;
 type PlanKey = (typeof ALLOWED_PLANS)[number];
 const ALLOWED_COUNTRIES = new Set([
   'DE','AT','CH',
@@ -70,7 +70,6 @@ const INTENT_TTL_MS = 30 * 60_000;
 
 function priceIdForPlan(env: Env, plan: PlanKey): string | undefined {
   if (plan === 'monthly')  return env.PADDLE_PRICE_MONTHLY;
-  if (plan === 'halfyear') return env.PADDLE_PRICE_HALFYEAR;
   if (plan === 'yearly')   return env.PADDLE_PRICE_YEARLY;
   return undefined;
 }

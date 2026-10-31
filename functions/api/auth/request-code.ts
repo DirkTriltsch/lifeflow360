@@ -32,7 +32,7 @@ interface ConsentSnapshot {
 }
 
 const EMAIL_RX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-const NEXT_URL_RX = /^\/checkout\/(monthly|halfyear|yearly)(?:\.html)?$/;
+const NEXT_URL_RX = /^\/checkout\/(monthly|yearly)(?:\.html)?$/;
 
 function sanitizeNextUrl(raw: unknown): string | null {
   if (typeof raw !== 'string') return null;

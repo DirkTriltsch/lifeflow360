@@ -53,10 +53,10 @@ test.describe('LifePlus checkout API smoke', () => {
 
   test('pricing preview covers country tax and discount read path', async ({ request }) => {
     const cases = [
-      { name: 'DE no discount', body: { plan: 'halfyear', countryCode: 'DE' }, expectDiscount: false },
-      { name: 'DE DAO20', body: { plan: 'halfyear', countryCode: 'DE', discountCode: DEFAULT_DISCOUNT }, expectDiscount: true },
-      { name: 'AT DAO20', body: { plan: 'halfyear', countryCode: 'AT', discountCode: DEFAULT_DISCOUNT }, expectDiscount: true },
-      { name: 'DE full discount', body: { plan: 'halfyear', countryCode: 'DE', discountCode: FULL_DISCOUNT }, expectDiscount: true },
+      { name: 'DE no discount', body: { plan: 'yearly', countryCode: 'DE' }, expectDiscount: false },
+      { name: 'DE DAO20', body: { plan: 'yearly', countryCode: 'DE', discountCode: DEFAULT_DISCOUNT }, expectDiscount: true },
+      { name: 'AT DAO20', body: { plan: 'yearly', countryCode: 'AT', discountCode: DEFAULT_DISCOUNT }, expectDiscount: true },
+      { name: 'DE full discount', body: { plan: 'yearly', countryCode: 'DE', discountCode: FULL_DISCOUNT }, expectDiscount: true },
     ];
 
     const results = await Promise.all(
@@ -81,7 +81,7 @@ test.describe('LifePlus checkout API smoke', () => {
 
   test('pricing preview reports invalid discount without false green state', async ({ request }) => {
     const { status, data } = await postJson(request, '/api/billing/preview-pricing', {
-      plan: 'halfyear',
+      plan: 'yearly',
       countryCode: 'DE',
       discountCode: `NOPE-${RUN_ID}`,
     });
@@ -96,7 +96,7 @@ test.describe('LifePlus checkout API smoke', () => {
   test('input validation catches local UX validation cases before Paddle', async ({ request }) => {
     await test.step('preview invalid country', async () => {
       const { status, data } = await postJson(request, '/api/billing/preview-pricing', {
-        plan: 'halfyear',
+        plan: 'yearly',
         countryCode: 'XX',
       });
       expect(status).toBe(400);
@@ -256,7 +256,7 @@ async function cancelCheckout(
 
 function baseIntent(label: string, overrides: JsonObject = {}): JsonObject {
   return {
-    plan: 'halfyear',
+    plan: 'yearly',
     checkoutEmail: `api-smoke+${RUN_ID}-${label}@lifeflow360.app`,
     companyName: `LifePlus API Smoke ${label}`,
     street: 'Teststrasse 1',

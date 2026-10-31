@@ -34,7 +34,7 @@ interface Body {
 
 const TRIAL_DAYS = 14;
 const EMAIL_RX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-const NEXT_URL_RX = /^\/(?:checkout\/(?:monthly|halfyear|yearly)\.html|signup\.html|pricing\.html|mein-konto\.html|)$/;
+const NEXT_URL_RX = /^\/(?:checkout\/(?:monthly|yearly)\.html|signup\.html|pricing\.html|mein-konto\.html|)$/;
 
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   // Hard guard — beide Dev-Flags muessen gesetzt sein.

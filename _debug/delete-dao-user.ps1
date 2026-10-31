@@ -14,6 +14,17 @@ if (-not (Test-Path -LiteralPath $sqlFile)) {
 }
 
 $mode = if ($Local) { "--local" } else { "--remote" }
+
+# Lokales wrangler direkt ueber node starten, NICHT ueber npx: npx haengt sonst
+# unsichtbar an einer "Ok to proceed?"-Install-Abfrage, wenn das Skript
+# ausserhalb des Repos gestartet wird.
+$repoRoot = Split-Path -Parent $PSScriptRoot
+$wranglerJs = Join-Path $repoRoot "node_modules\wrangler\bin\wrangler.js"
+if (-not (Test-Path -LiteralPath $wranglerJs)) {
+  throw "wrangler nicht gefunden: $wranglerJs (vorher 'npm install' im Repo-Root ausfuehren)"
+}
+function Invoke-Wrangler { & node $wranglerJs @args }
+
 $email = $EmailToDelete.Trim().ToLowerInvariant()
 if ($email -notmatch '^[^@\s]+@[^@\s]+\.[^@\s]+$') {
   throw "Invalid EmailToDelete: $EmailToDelete"
@@ -26,8 +37,17 @@ $tempSqlFile = Join-Path ([System.IO.Path]::GetTempPath()) ("delete-user-" + [Sy
 try {
   Set-Content -LiteralPath $tempSqlFile -Value $deleteSql -Encoding UTF8
 
+  # Eigene Bestaetigung statt wranglers "Ok to proceed? (Y/n)": dessen Prompt nimmt
+  # im Windows-Terminal teils keine Tastatureingaben an -> wrangler laeuft mit --yes.
+  Write-Host "Ziel: email=$email db=$Database mode=$mode" -ForegroundColor Cyan
+  $answer = Read-Host "Wirklich $email aus '$Database' ($mode) loeschen? 'ja' eingeben zum Fortfahren"
+  if ($answer.Trim().ToLowerInvariant() -ne "ja") {
+    throw "Abgebrochen - nichts geloescht."
+  }
+
   Write-Host "Deleting $email from D1 database '$Database' ($mode)..." -ForegroundColor Yellow
-  npx wrangler d1 execute $Database $mode --file $tempSqlFile
+  Invoke-Wrangler d1 execute $Database $mode --file $tempSqlFile --yes
+  if ($LASTEXITCODE -ne 0) { throw "Delete fehlgeschlagen (wrangler exit $LASTEXITCODE)." }
 } finally {
   if (Test-Path -LiteralPath $tempSqlFile) {
     Remove-Item -LiteralPath $tempSqlFile -Force
@@ -45,8 +65,10 @@ $remainingUsersSql = "SELECT u.email_lower, COUNT(DISTINCT s.id) AS sessions, CO
 
 Write-Host ""
 Write-Host "Target email counts:" -ForegroundColor Cyan
-npx wrangler d1 execute $Database $mode --command $targetCountsSql
+Invoke-Wrangler d1 execute $Database $mode --command $targetCountsSql
+if ($LASTEXITCODE -ne 0) { throw "Verifikation (target counts) fehlgeschlagen (wrangler exit $LASTEXITCODE)." }
 
 Write-Host ""
 Write-Host "Remaining users:" -ForegroundColor Cyan
-npx wrangler d1 execute $Database $mode --command $remainingUsersSql
+Invoke-Wrangler d1 execute $Database $mode --command $remainingUsersSql
+if ($LASTEXITCODE -ne 0) { throw "Verifikation (remaining users) fehlgeschlagen (wrangler exit $LASTEXITCODE)." }

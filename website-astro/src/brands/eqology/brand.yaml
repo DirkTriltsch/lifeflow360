@@ -10,7 +10,6 @@ paddle:
   env: "sandbox"
   clientToken: "REPLACE_WITH_PADDLE_CLIENT_TOKEN"
   priceIdMonthly: "REPLACE_WITH_PRICE_ID_MONTHLY"
-  priceIdHalfYear: "REPLACE_WITH_PRICE_ID_HALFYEAR"
   priceIdYearly: "REPLACE_WITH_PRICE_ID_YEARLY"
 lockup:
   initial: "E"

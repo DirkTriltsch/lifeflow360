@@ -2,7 +2,7 @@
 import type { Brand } from '@shared/content-schemas/config';
 import B2BHeaderBanner from '@shared/components/checkout/B2BHeaderBanner.astro';
 
-type PlanKey = 'monthly' | 'halfyear' | 'yearly';
+type PlanKey = 'monthly' | 'yearly';
 
 interface Props {
   brand: Brand;
@@ -17,9 +17,8 @@ const { brand, tierName, plan, priceId, source } = Astro.props;
 // erstellten Paddle-Transaktion (Step 2). Bis dahin zeigen wir die DE-
 // Default-Werte. Siehe Hinweis "preview-hint" unter den Totals.
 const planPricing: Record<PlanKey, { netPeriod: number; periodLabel: string; periodMonths: number }> = {
-  monthly:  { netPeriod: 14.95,  periodLabel: 'Monat',     periodMonths: 1  },
-  halfyear: { netPeriod: 82.23,  periodLabel: 'Halbjahr',  periodMonths: 6  },
-  yearly:   { netPeriod: 149.50, periodLabel: 'Jahr',      periodMonths: 12 },
+  monthly:  { netPeriod: 8.53,   periodLabel: 'Monat',     periodMonths: 1  },
+  yearly:   { netPeriod: 78.83,  periodLabel: 'Jahr',      periodMonths: 12 },
 };
 const VAT_RATE = 0.19;
 const net = planPricing[plan].netPeriod;

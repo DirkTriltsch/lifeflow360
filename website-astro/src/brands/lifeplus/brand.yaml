@@ -11,7 +11,6 @@ paddle:
   env: "sandbox"
   clientToken: "test_fee36ee3e68b2f654e1ad01ab59"
   priceIdMonthly: "pri_01ks580xcmk17mam0qp9tjkwxg"
-  priceIdHalfYear: "pri_01ksfd0ws71rgxkj7gfrrzkywm"
   priceIdYearly: "pri_01ks5864k3detqr1j2v3cx7dhs"
 lockup:
   initial: "L"

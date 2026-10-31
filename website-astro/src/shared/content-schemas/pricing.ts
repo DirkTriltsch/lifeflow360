@@ -5,7 +5,7 @@
 // Schema gebremst werden. Wenn ein Brand strukturell divergiert, forkt er
 // PricingPageDefault statt diesen Typ aufzuweichen.
 
-export type PricingPlanKey = 'monthly' | 'halfyear' | 'yearly';
+export type PricingPlanKey = 'monthly' | 'yearly';
 
 export type PricingFeature = {
   strong?: string;

@@ -20,7 +20,6 @@ const paddleSchema = z.object({
   env: z.enum(['sandbox', 'live']),
   clientToken: z.string(),
   priceIdMonthly: z.string(),
-  priceIdHalfYear: z.string().optional(),
   priceIdYearly: z.string(),
 });
 

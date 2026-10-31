@@ -1,6 +1,6 @@
 ---
 // Pro-Plan-Checkout (Codex-Modell). Dynamic-Route.
-// URL: /checkout/yearly | /checkout/halfyear | /checkout/monthly
+// URL: /checkout/yearly | /checkout/monthly
 // Historische Checkout-Prototypen wurden durch das B2B-v6.1-Runbook ersetzt.
 // Fuehrender Stand: _doc/paddle_checkout/checkout-billing-runbook-b2b-v6-1.md
 // Plan-Param liegt im URL-Pfad — funktioniert sowohl im SSG-Build (statisch
@@ -14,12 +14,11 @@ import { getBrand } from '@shared/lib/brand';
 export function getStaticPaths() {
   return [
     { params: { plan: 'monthly' } },
-    { params: { plan: 'halfyear' } },
     { params: { plan: 'yearly' } },
   ];
 }
 
-type PlanKey = 'monthly' | 'halfyear' | 'yearly';
+type PlanKey = 'monthly' | 'yearly';
 const plan = Astro.params.plan as PlanKey;
 
 const brand = await getBrand('lifeplus');
@@ -29,13 +28,11 @@ const brand = await getBrand('lifeplus');
 // das auf der Pricing-Page synchron gehalten werden muss.
 const tierName: Record<PlanKey, string> = {
   monthly:  '1 Monat',
-  halfyear: '6 Monate',
   yearly:   '12 Monate',
 };
 
 const priceIdMap: Record<PlanKey, string | undefined> = {
   monthly:  brand.paddle.priceIdMonthly,
-  halfyear: brand.paddle.priceIdHalfYear,
   yearly:   brand.paddle.priceIdYearly,
 };
 const priceId = priceIdMap[plan];

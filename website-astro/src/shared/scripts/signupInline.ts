@@ -15,7 +15,7 @@ interface MeResponse {
 }
 
 const EMAIL_RX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-const NEXT_URL_RX = /^\/checkout\/(monthly|halfyear|yearly)(?:\.html)?$/;
+const NEXT_URL_RX = /^\/checkout\/(monthly|yearly)(?:\.html)?$/;
 const RESEND_COOLDOWN_SECONDS = 30;
 
 export function setupSignupInline(): void {
